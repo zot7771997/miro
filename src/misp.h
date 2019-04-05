@@ -3,39 +3,39 @@
 
 #include "Protocol.h"
 
-#define MiSP_GET_IDENT 100 //Запрос версии прошивки (->MIRO)
-#define MiSP_IDENT 101 //Содержит версию прошивки (MIRO->)
-#define MiSP_MOVE 111 //Команда на движение робота (->MIRO)
-#define MiSP_ROTATE 112 //Команда на поворот робота (->MIRO)
-#define MiSP_GET_SPEED 113 //Команда на получение данных о линейной и угловой скорости робота (->MIRO)
-#define MiSP_SPEED 114 //Содержит данные о линейной и угловой скорости робота (MIRO->)
-#define MiSP_GET_PATH 115 //Команда на получение длины пройденного пути (->MIRO)
-#define MiSP_PATH 116 //Содержит длину пройденного пути (MIRO->)
+#define MiSP_GET_IDENT 100 //Р—Р°РїСЂРѕСЃ РІРµСЂСЃРёРё РїСЂРѕС€РёРІРєРё (->MIRO)
+#define MiSP_IDENT 101 //РЎРѕРґРµСЂР¶РёС‚ РІРµСЂСЃРёСЋ РїСЂРѕС€РёРІРєРё (MIRO->)
+#define MiSP_MOVE 111 //РљРѕРјР°РЅРґР° РЅР° РґРІРёР¶РµРЅРёРµ СЂРѕР±РѕС‚Р° (->MIRO)
+#define MiSP_ROTATE 112 //РљРѕРјР°РЅРґР° РЅР° РїРѕРІРѕСЂРѕС‚ СЂРѕР±РѕС‚Р° (->MIRO)
+#define MiSP_GET_SPEED 113 //РљРѕРјР°РЅРґР° РЅР° РїРѕР»СѓС‡РµРЅРёРµ РґР°РЅРЅС‹С… Рѕ Р»РёРЅРµР№РЅРѕР№ Рё СѓРіР»РѕРІРѕР№ СЃРєРѕСЂРѕСЃС‚Рё СЂРѕР±РѕС‚Р° (->MIRO)
+#define MiSP_SPEED 114 //РЎРѕРґРµСЂР¶РёС‚ РґР°РЅРЅС‹Рµ Рѕ Р»РёРЅРµР№РЅРѕР№ Рё СѓРіР»РѕРІРѕР№ СЃРєРѕСЂРѕСЃС‚Рё СЂРѕР±РѕС‚Р° (MIRO->)
+#define MiSP_GET_PATH 115 //РљРѕРјР°РЅРґР° РЅР° РїРѕР»СѓС‡РµРЅРёРµ РґР»РёРЅС‹ РїСЂРѕР№РґРµРЅРЅРѕРіРѕ РїСѓС‚Рё (->MIRO)
+#define MiSP_PATH 116 //РЎРѕРґРµСЂР¶РёС‚ РґР»РёРЅСѓ РїСЂРѕР№РґРµРЅРЅРѕРіРѕ РїСѓС‚Рё (MIRO->)
 
-#define MiSP_LED_ON	211 //Команда на включение светодиода (->MIRO)
+#define MiSP_LED_ON	211 //РљРѕРјР°РЅРґР° РЅР° РІРєР»СЋС‡РµРЅРёРµ СЃРІРµС‚РѕРґРёРѕРґР° (->MIRO)
 
-#define MiSP_GET_US_DIST 212 //Запрос расстояния, измеренного УЗ-дальномером (->MIRO)
-#define MiSP_US_DIST 213 //Содержит расстояние, измеренное УЗ-дальномером (MIRO->)
+#define MiSP_GET_US_DIST 212 //Р—Р°РїСЂРѕСЃ СЂР°СЃСЃС‚РѕСЏРЅРёСЏ, РёР·РјРµСЂРµРЅРЅРѕРіРѕ РЈР—-РґР°Р»СЊРЅРѕРјРµСЂРѕРј (->MIRO)
+#define MiSP_US_DIST 213 //РЎРѕРґРµСЂР¶РёС‚ СЂР°СЃСЃС‚РѕСЏРЅРёРµ, РёР·РјРµСЂРµРЅРЅРѕРµ РЈР—-РґР°Р»СЊРЅРѕРјРµСЂРѕРј (MIRO->)
 
-#define MiSP_GET_LINE_SENSE 214 //Запрос значения с датчикоа линии (->MIRO)
-#define MiSP_LINE_SENSE 215 //Содержит значение с датчика линии (MIRO->)
+#define MiSP_GET_LINE_SENSE 214 //Р—Р°РїСЂРѕСЃ Р·РЅР°С‡РµРЅРёСЏ СЃ РґР°С‚С‡РёРєРѕР° Р»РёРЅРёРё (->MIRO)
+#define MiSP_LINE_SENSE 215 //РЎРѕРґРµСЂР¶РёС‚ Р·РЅР°С‡РµРЅРёРµ СЃ РґР°С‚С‡РёРєР° Р»РёРЅРёРё (MIRO->)
 
-#define MiSP_GET_LIGHT_SENSE 216 //Запрос значения с фоторезистора (->MIRO)
-#define MiSP_LIGHT_SENSE 217 //Содержит значения с фоторезистора (MIRO->)
+#define MiSP_GET_LIGHT_SENSE 216 //Р—Р°РїСЂРѕСЃ Р·РЅР°С‡РµРЅРёСЏ СЃ С„РѕС‚РѕСЂРµР·РёСЃС‚РѕСЂР° (->MIRO)
+#define MiSP_LIGHT_SENSE 217 //РЎРѕРґРµСЂР¶РёС‚ Р·РЅР°С‡РµРЅРёСЏ СЃ С„РѕС‚РѕСЂРµР·РёСЃС‚РѕСЂР° (MIRO->)
 
-#define MiSP_BUZZER_TONE 218 //Запрос на проигрывание звука (->MIRO)
+#define MiSP_BUZZER_TONE 218 //Р—Р°РїСЂРѕСЃ РЅР° РїСЂРѕРёРіСЂС‹РІР°РЅРёРµ Р·РІСѓРєР° (->MIRO)
 
-//То, что вообще пока не реализовано, но то, что надо обязательно реализовать
+//РўРѕ, С‡С‚Рѕ РІРѕРѕР±С‰Рµ РїРѕРєР° РЅРµ СЂРµР°Р»РёР·РѕРІР°РЅРѕ, РЅРѕ С‚Рѕ, С‡С‚Рѕ РЅР°РґРѕ РѕР±СЏР·Р°С‚РµР»СЊРЅРѕ СЂРµР°Р»РёР·РѕРІР°С‚СЊ
 
-//#define MiSP_BUZZER_SONG //Запрос на проигрывание мелодии (->MIRO)
-//#define MiSP_PMLIDAR //Запрос массива данных с ИК дальномера на сервоприводе
-//#define MiSP_CAM_ANGLE //Установка угла сервопривода камеры
+//#define MiSP_BUZZER_SONG //Р—Р°РїСЂРѕСЃ РЅР° РїСЂРѕРёРіСЂС‹РІР°РЅРёРµ РјРµР»РѕРґРёРё (->MIRO)
+//#define MiSP_PMLIDAR //Р—Р°РїСЂРѕСЃ РјР°СЃСЃРёРІР° РґР°РЅРЅС‹С… СЃ РРљ РґР°Р»СЊРЅРѕРјРµСЂР° РЅР° СЃРµСЂРІРѕРїСЂРёРІРѕРґРµ
+//#define MiSP_CAM_ANGLE //РЈСЃС‚Р°РЅРѕРІРєР° СѓРіР»Р° СЃРµСЂРІРѕРїСЂРёРІРѕРґР° РєР°РјРµСЂС‹
 
-/*Функции формирования пакетов*/
+/*Р¤СѓРЅРєС†РёРё С„РѕСЂРјРёСЂРѕРІР°РЅРёСЏ РїР°РєРµС‚РѕРІ*/
 int _misp_get_ident(struct tPacket *packet);
 int _misp_ident(struct tPacket *packet, unsigned long ident);
-int _misp_move(struct tPacket *packet, float lin_speed, float ang_speed, float distance);//если distance == 0, то это движение постоянное
-int _misp_rotate(struct tPacket *packet, float ang_speed, float ang);//если ang == 0, то это движение постоянное
+int _misp_move(struct tPacket *packet, float lin_speed, float ang_speed, float distance);//РµСЃР»Рё distance == 0, С‚Рѕ СЌС‚Рѕ РґРІРёР¶РµРЅРёРµ РїРѕСЃС‚РѕСЏРЅРЅРѕРµ
+int _misp_rotate(struct tPacket *packet, float ang_speed, float ang);//РµСЃР»Рё ang == 0, С‚Рѕ СЌС‚Рѕ РґРІРёР¶РµРЅРёРµ РїРѕСЃС‚РѕСЏРЅРЅРѕРµ
 int _misp_get_speed(struct tPacket *packet);
 int _misp_speed(struct tPacket *packet, float lin_speed, float ang_speed);
 int _misp_get_path(struct tPacket *packet);
@@ -50,9 +50,9 @@ int _misp_get_light_sense(struct tPacket *packet, unsigned char sensor);
 int _misp_light_sense(struct tPacket *packet, unsigned char sensor, float value);
 int _misp_buzzer_tone(struct tPacket *packet, unsigned char buzzer, unsigned int frequency, unsigned long duration);
 
-/*Функции извлечения данных из пакетов*/
+/*Р¤СѓРЅРєС†РёРё РёР·РІР»РµС‡РµРЅРёСЏ РґР°РЅРЅС‹С… РёР· РїР°РєРµС‚РѕРІ*/
 unsigned char _rx_get_cmd(struct tPacket *packet);
-float _rx_get_1f32(struct tPacket *packet); //Вернуть первый параметр типа float после кода пакета
+float _rx_get_1f32(struct tPacket *packet); //Р’РµСЂРЅСѓС‚СЊ РїРµСЂРІС‹Р№ РїР°СЂР°РјРµС‚СЂ С‚РёРїР° float РїРѕСЃР»Рµ РєРѕРґР° РїР°РєРµС‚Р°
 unsigned char _rx_get_1b8(struct tPacket *packet);
 unsigned char _rx_get_2b8(struct tPacket *packet);
 float _rx_get_2f32(struct tPacket *packet);

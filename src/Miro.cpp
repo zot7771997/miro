@@ -113,7 +113,7 @@ int Miro::dettachDevice(Device *dev)
 		}
 	}
 
-	return -2; //Такого устройства нет среди подключенных к роботу
+	return -2; //РўР°РєРѕРіРѕ СѓСЃС‚СЂРѕР№СЃС‚РІР° РЅРµС‚ СЃСЂРµРґРё РїРѕРґРєР»СЋС‡РµРЅРЅС‹С… Рє СЂРѕР±РѕС‚Сѓ
 }
 
 int Miro::dettachDevice(byte DeviceIndex)

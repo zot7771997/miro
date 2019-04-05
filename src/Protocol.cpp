@@ -67,5 +67,5 @@ int _protocol_d2p(struct tPacket *packet, unsigned char *data)
 
 	if (!_protocol_crc_check(packet)) return -4;
 
-	return 0; //Возвращает номер команды
+	return 0; //Р’РѕР·РІСЂР°С‰Р°РµС‚ РЅРѕРјРµСЂ РєРѕРјР°РЅРґС‹
 }

@@ -55,7 +55,7 @@ void Chassis::Init()
 	this->_eepromReadWheelTable((float*)this->_calib_wheel_table);
 	for (byte w = 0; w < WHEEL_COUNT; w++)
 	{
-		wheel_time_max[w] = WHEEL_TIME(this->_calib_wheel_table[w][SPEED][0]);//Т. к. это можно посчитать заранее вне цикла - так и делаем
+		wheel_time_max[w] = WHEEL_TIME(this->_calib_wheel_table[w][SPEED][0]);//Рў. Рє. СЌС‚Рѕ РјРѕР¶РЅРѕ РїРѕСЃС‡РёС‚Р°С‚СЊ Р·Р°СЂР°РЅРµРµ РІРЅРµ С†РёРєР»Р° - С‚Р°Рє Рё РґРµР»Р°РµРј
 		wheel_time_min[w] = WHEEL_TIME(this->_calib_wheel_table[w][SPEED][WHEEL_TABLE_SIZE - 1]);
 	}
 
@@ -94,7 +94,7 @@ void Chassis::Sync()
 	for (byte w = 0; w < WHEEL_COUNT; w++)
 	{
 		wheelTime = 0;
-		if ((synctime - _wheelTime[w]) > (2 * wheel_time_max[w])) //Колесо покоится
+		if ((synctime - _wheelTime[w]) > (2 * wheel_time_max[w])) //РљРѕР»РµСЃРѕ РїРѕРєРѕРёС‚СЃСЏ
 		{
 			for (byte i = 0; i < MEAN_DEPTH; i++)
 			{
@@ -103,7 +103,7 @@ void Chassis::Sync()
 			this->_wheelAngSpeed[w] = 0;
 			this->_wheel_move[w] = false;
 		}
-		else if (_syncloop[w]) //Колесо вращается и произошло очередное пересечение маркерной линейки колеса
+		else if (_syncloop[w]) //РљРѕР»РµСЃРѕ РІСЂР°С‰Р°РµС‚СЃСЏ Рё РїСЂРѕРёР·РѕС€Р»Рѕ РѕС‡РµСЂРµРґРЅРѕРµ РїРµСЂРµСЃРµС‡РµРЅРёРµ РјР°СЂРєРµСЂРЅРѕР№ Р»РёРЅРµР№РєРё РєРѕР»РµСЃР°
 		{
 			_syncloop[w] = false;
 			wheelTime = 0;
@@ -170,11 +170,11 @@ int Chassis::wheelRotateAng(float *speed, float *ang)
 	{
 		if ((fabs(speed[w]) < this->_calib_wheel_table[w][SPEED][0]) && (fabs(speed[w]) > 0))
 		{
-			return -1; //ошибка - невозможно совершить поворот колеса с такой маленькой скоростью
+			return -1; //РѕС€РёР±РєР° - РЅРµРІРѕР·РјРѕР¶РЅРѕ СЃРѕРІРµСЂС€РёС‚СЊ РїРѕРІРѕСЂРѕС‚ РєРѕР»РµСЃР° СЃ С‚Р°РєРѕР№ РјР°Р»РµРЅСЊРєРѕР№ СЃРєРѕСЂРѕСЃС‚СЊСЋ
 		}
 		if ((fabs(ang[w]) < float(SEGMENT_ANGLE)) && (fabs(speed[w]) > 0))
 		{
-			return -2; //ошибка - невозможно совершить поворот колеса на такой маленький угол
+			return -2; //РѕС€РёР±РєР° - РЅРµРІРѕР·РјРѕР¶РЅРѕ СЃРѕРІРµСЂС€РёС‚СЊ РїРѕРІРѕСЂРѕС‚ РєРѕР»РµСЃР° РЅР° С‚Р°РєРѕР№ РјР°Р»РµРЅСЊРєРёР№ СѓРіРѕР»
 		}
 	}
 
@@ -182,7 +182,7 @@ int Chassis::wheelRotateAng(float *speed, float *ang)
 	{
 		if (speed[w] != 0) break;
 	}
-	if (w == WHEEL_COUNT) //Остановка моторов
+	if (w == WHEEL_COUNT) //РћСЃС‚Р°РЅРѕРІРєР° РјРѕС‚РѕСЂРѕРІ
 	{
 		for (w = 0; w < WHEEL_COUNT; w++)
 		{
@@ -210,7 +210,7 @@ int Chassis::wheelRotateAng(float *speed, float *ang)
 		if ((this->_wheelSetAng[w] * this->_wheelSetAngSpeed[w]) >= 0) this->_wheelDir[w] = 1;
 		else this->_wheelDir[w] = -1;
 
-		dist_wheelTachomCount[w] = _wheelTachomCount[w] + int(0.51 + (fabs(this->_wheelSetAng[w]) / float(SEGMENT_ANGLE))); //число сегментов маркерной линейки колеса, которое нужно отсчитать, чтобы повернуть на требуемый угол;
+		dist_wheelTachomCount[w] = _wheelTachomCount[w] + int(0.51 + (fabs(this->_wheelSetAng[w]) / float(SEGMENT_ANGLE))); //С‡РёСЃР»Рѕ СЃРµРіРјРµРЅС‚РѕРІ РјР°СЂРєРµСЂРЅРѕР№ Р»РёРЅРµР№РєРё РєРѕР»РµСЃР°, РєРѕС‚РѕСЂРѕРµ РЅСѓР¶РЅРѕ РѕС‚СЃС‡РёС‚Р°С‚СЊ, С‡С‚РѕР±С‹ РїРѕРІРµСЂРЅСѓС‚СЊ РЅР° С‚СЂРµР±СѓРµРјС‹Р№ СѓРіРѕР»;
 		//Serial.println(float(SEGMENT_ANGLE));
 		//Serial.println(fabs(this->_wheelSetAng[w]) / float(SEGMENT_ANGLE));
 		//Serial.println(dist_wheelTachomCount[w] - _wheelTachomCount[w]);
@@ -252,15 +252,15 @@ int  Chassis::wheelRotateAng_one(float speed, float ang, byte wheel)
 {
 	if ((fabs(speed) < this->_calib_wheel_table[wheel][SPEED][0]) && (fabs(speed) > 0))
 	{
-		return -1; //ошибка - невозможно совершить поворот колеса с такой маленькой скоростью
+		return -1; //РѕС€РёР±РєР° - РЅРµРІРѕР·РјРѕР¶РЅРѕ СЃРѕРІРµСЂС€РёС‚СЊ РїРѕРІРѕСЂРѕС‚ РєРѕР»РµСЃР° СЃ С‚Р°РєРѕР№ РјР°Р»РµРЅСЊРєРѕР№ СЃРєРѕСЂРѕСЃС‚СЊСЋ
 	}
 
 	if ((fabs(ang) < float(SEGMENT_ANGLE)) && (fabs(speed) > 0))
 	{
-		return -2; //ошибка - невозможно совершить поворот колеса на такой маленький угол
+		return -2; //РѕС€РёР±РєР° - РЅРµРІРѕР·РјРѕР¶РЅРѕ СЃРѕРІРµСЂС€РёС‚СЊ РїРѕРІРѕСЂРѕС‚ РєРѕР»РµСЃР° РЅР° С‚Р°РєРѕР№ РјР°Р»РµРЅСЊРєРёР№ СѓРіРѕР»
 	}
 
-	if (speed == 0) //Остановка колеса
+	if (speed == 0) //РћСЃС‚Р°РЅРѕРІРєР° РєРѕР»РµСЃР°
 	{
 		analogWrite(wheel_PWM_pins[wheel], 0);
 		digitalWrite(wheel_DIR_pins[wheel], LOW);
@@ -278,7 +278,7 @@ int  Chassis::wheelRotateAng_one(float speed, float ang, byte wheel)
 	if ((this->_wheelSetAng[wheel] * this->_wheelSetAngSpeed[wheel]) >= 0) this->_wheelDir[wheel] = 1;
 	else this->_wheelDir[wheel] = -1;
 
-	dist_wheelTachomCount[wheel] = _wheelTachomCount[wheel] + ((fabs(this->_wheelSetAng[wheel]) / float(SEGMENT_ANGLE))); //число сегментов маркерной линейки колеса, которое нужно отсчитать, чтобы повернуть на требуемый угол;
+	dist_wheelTachomCount[wheel] = _wheelTachomCount[wheel] + ((fabs(this->_wheelSetAng[wheel]) / float(SEGMENT_ANGLE))); //С‡РёСЃР»Рѕ СЃРµРіРјРµРЅС‚РѕРІ РјР°СЂРєРµСЂРЅРѕР№ Р»РёРЅРµР№РєРё РєРѕР»РµСЃР°, РєРѕС‚РѕСЂРѕРµ РЅСѓР¶РЅРѕ РѕС‚СЃС‡РёС‚Р°С‚СЊ, С‡С‚РѕР±С‹ РїРѕРІРµСЂРЅСѓС‚СЊ РЅР° С‚СЂРµР±СѓРµРјС‹Р№ СѓРіРѕР»;
     Serial.println(((fabs(this->_wheelSetAng[wheel]) / float(SEGMENT_ANGLE))));
     Serial.println(dist_wheelTachomCount[wheel]);
     this->_vbat = getVoltage();
@@ -316,7 +316,7 @@ int Chassis::wheelRotate(float *speed)
 	{
 		if ((fabs(speed[w]) < this->_calib_wheel_table[w][SPEED][0]) && (fabs(speed[w]) > 0))
 		{
-			return -1; //ошибка - невозможно совершить поворот колеса с такой маленькой скоростью
+			return -1; //РѕС€РёР±РєР° - РЅРµРІРѕР·РјРѕР¶РЅРѕ СЃРѕРІРµСЂС€РёС‚СЊ РїРѕРІРѕСЂРѕС‚ РєРѕР»РµСЃР° СЃ С‚Р°РєРѕР№ РјР°Р»РµРЅСЊРєРѕР№ СЃРєРѕСЂРѕСЃС‚СЊСЋ
 		}
 	}
 
@@ -324,7 +324,7 @@ int Chassis::wheelRotate(float *speed)
 
 	for (w = 0; w < WHEEL_COUNT; w++)
 	{
-		if (speed[w] == 0) //Остановка мотора
+		if (speed[w] == 0) //РћСЃС‚Р°РЅРѕРІРєР° РјРѕС‚РѕСЂР°
 		{
 			analogWrite(wheel_PWM_pins[w], 0);
 			digitalWrite(wheel_DIR_pins[w], LOW);
@@ -340,7 +340,7 @@ int Chassis::wheelRotate(float *speed)
 			else this->_wheelDir[w] = -1;
 			//dist_wheelTachomCount[w] = 65535;
 			U[w] = this->_wheelGetU(fabs(this->_wheelSetAngSpeed[w]), w, this->_vbat);
-			if (U[w] < 0) return -2; //Низкий заряд батарреи???
+			if (U[w] < 0) return -2; //РќРёР·РєРёР№ Р·Р°СЂСЏРґ Р±Р°С‚Р°СЂСЂРµРё???
 			U[w] = (float)this->_wheelDir[w] * U[w];
 			I[w] = 0;
 		}
@@ -354,12 +354,12 @@ bool Chassis::wheelIsMoving(byte wheel)
 	return this->_wheel_move[wheel];
 }
 
-float Chassis::wheelGetAngSpeedRad(byte wheel)//Расчитывается в Sync()
+float Chassis::wheelGetAngSpeedRad(byte wheel)//Р Р°СЃС‡РёС‚С‹РІР°РµС‚СЃСЏ РІ Sync()
 {
 	return this->_wheelAngSpeed[wheel] / MB_PI2ANG;
 }
 
-float Chassis::wheelGetAngSpeed(byte wheel)//Расчитывается в Sync()
+float Chassis::wheelGetAngSpeed(byte wheel)//Р Р°СЃС‡РёС‚С‹РІР°РµС‚СЃСЏ РІ Sync()
 {
 	return (this->_wheelAngSpeed[wheel]);
 }
@@ -477,7 +477,7 @@ void Chassis::wheelCalibrate()
                 
                 digitalWrite(wheel_DIR_pins[w], !dir[w]);
 	            digitalWrite(wheel_PWM_pins[w], dir[w]);
-	            delay(wheelBreakDelay);//Задержка для жесктого останова - именно на это время на двигатели подается обратное напряжение
+	            delay(wheelBreakDelay);//Р—Р°РґРµСЂР¶РєР° РґР»СЏ Р¶РµСЃРєС‚РѕРіРѕ РѕСЃС‚Р°РЅРѕРІР° - РёРјРµРЅРЅРѕ РЅР° СЌС‚Рѕ РІСЂРµРјСЏ РЅР° РґРІРёРіР°С‚РµР»Рё РїРѕРґР°РµС‚СЃСЏ РѕР±СЂР°С‚РЅРѕРµ РЅР°РїСЂСЏР¶РµРЅРёРµ
 	            digitalWrite(wheel_DIR_pins[w], dir[w]);
 
                 error_count = error_count + (_wheelTachomCount[w] - dist_wheelTachomCount[w]);
@@ -497,7 +497,7 @@ void Chassis::wheelCalibrate()
                 
                     digitalWrite(wheel_DIR_pins[w], !dir[w]);
 	                digitalWrite(wheel_PWM_pins[w], dir[w]);
-	                delay(wheelBreakDelay);//Задержка для жесктого останова - именно на это время на двигатели подается обратное напряжение
+	                delay(wheelBreakDelay);//Р—Р°РґРµСЂР¶РєР° РґР»СЏ Р¶РµСЃРєС‚РѕРіРѕ РѕСЃС‚Р°РЅРѕРІР° - РёРјРµРЅРЅРѕ РЅР° СЌС‚Рѕ РІСЂРµРјСЏ РЅР° РґРІРёРіР°С‚РµР»Рё РїРѕРґР°РµС‚СЃСЏ РѕР±СЂР°С‚РЅРѕРµ РЅР°РїСЂСЏР¶РµРЅРёРµ
 	                digitalWrite(wheel_DIR_pins[w], dir[w]);
                     error_count = error_count + (_wheelTachomCount[w] - dist_wheelTachomCount[w]);
                     delay(500);
@@ -587,8 +587,8 @@ int Chassis::_wheelGetU(float ang_speed, int wheel, float volts)
 		if (this->_calib_wheel_table[wheel][SPEED][i] >= ang_speed) break;
 	}
 
-	//(v-v1)/(v2-v1) = (s-s1)/(s2-s1) - уравнение прямой через две точки, s - SPEED (град/сек), v - VOLTS (В)
-	//откуда v = ((s-s1)*(v2-v1)/(s2-s1)) + v1
+	//(v-v1)/(v2-v1) = (s-s1)/(s2-s1) - СѓСЂР°РІРЅРµРЅРёРµ РїСЂСЏРјРѕР№ С‡РµСЂРµР· РґРІРµ С‚РѕС‡РєРё, s - SPEED (РіСЂР°Рґ/СЃРµРє), v - VOLTS (Р’)
+	//РѕС‚РєСѓРґР° v = ((s-s1)*(v2-v1)/(s2-s1)) + v1
 
 	v = this->_calib_wheel_table[wheel][VOLTS][i - 1] + ((ang_speed - this->_calib_wheel_table[wheel][SPEED][i - 1])*(this->_calib_wheel_table[wheel][VOLTS][i] - this->_calib_wheel_table[wheel][VOLTS][i - 1]) / (this->_calib_wheel_table[wheel][SPEED][i] - this->_calib_wheel_table[wheel][SPEED][i - 1]));
 	U = (255 * v) / volts;
@@ -604,7 +604,7 @@ void Chassis::_wheel_rotate(byte wheel)
 
 	while (1)
 	{
-		if (dist_wheelTachomCount[wheel] <= _wheelTachomCount[wheel]) break; //Выход из цикла при достижении необходимого числа отметок маркера - поворот совершен
+		if (dist_wheelTachomCount[wheel] <= _wheelTachomCount[wheel]) break; //Р’С‹С…РѕРґ РёР· С†РёРєР»Р° РїСЂРё РґРѕСЃС‚РёР¶РµРЅРёРё РЅРµРѕР±С…РѕРґРёРјРѕРіРѕ С‡РёСЃР»Р° РѕС‚РјРµС‚РѕРє РјР°СЂРєРµСЂР° - РїРѕРІРѕСЂРѕС‚ СЃРѕРІРµСЂС€РµРЅ
 		
 		if (_syncloop[wheel])
 		{
@@ -650,7 +650,7 @@ void Chassis::_wheel_rotate(byte wheel)
 	digitalWrite(wheel_DIR_pins[wheel], !dir[wheel]);
 	digitalWrite(wheel_PWM_pins[wheel], dir[wheel]);
 	
-	delay(20);//Задержка для жесктого останова - именно на это время на двигатели подается обратное напряжение
+	delay(20);//Р—Р°РґРµСЂР¶РєР° РґР»СЏ Р¶РµСЃРєС‚РѕРіРѕ РѕСЃС‚Р°РЅРѕРІР° - РёРјРµРЅРЅРѕ РЅР° СЌС‚Рѕ РІСЂРµРјСЏ РЅР° РґРІРёРіР°С‚РµР»Рё РїРѕРґР°РµС‚СЃСЏ РѕР±СЂР°С‚РЅРѕРµ РЅР°РїСЂСЏР¶РµРЅРёРµ
 	digitalWrite(wheel_DIR_pins[wheel], dir[wheel]);
 
 	dist_wheelTachomCount[wheel] = _wheelTachomCount[wheel];
@@ -671,10 +671,10 @@ void Chassis::_wheel_rotate_sync()
 		byte w;
 		for (w = 0; w < WHEEL_COUNT; w++)
 		{
-			if (dist_wheelTachomCount[w] <= _wheelTachomCount[w]) break; //Выход из цикла при достижении необходимого числа отметок маркера - поворот совершен
+			if (dist_wheelTachomCount[w] <= _wheelTachomCount[w]) break; //Р’С‹С…РѕРґ РёР· С†РёРєР»Р° РїСЂРё РґРѕСЃС‚РёР¶РµРЅРёРё РЅРµРѕР±С…РѕРґРёРјРѕРіРѕ С‡РёСЃР»Р° РѕС‚РјРµС‚РѕРє РјР°СЂРєРµСЂР° - РїРѕРІРѕСЂРѕС‚ СЃРѕРІРµСЂС€РµРЅ
 		}
-		if (w < WHEEL_COUNT) break; //Тот break что выше выйдет только из цикла forб а этой строчкой мы выходим из всего цикла while
-		//При этом, выход из цикла произойдет когда хотя бы одно из колес совершит поворот.
+		if (w < WHEEL_COUNT) break; //РўРѕС‚ break С‡С‚Рѕ РІС‹С€Рµ РІС‹Р№РґРµС‚ С‚РѕР»СЊРєРѕ РёР· С†РёРєР»Р° forР± Р° СЌС‚РѕР№ СЃС‚СЂРѕС‡РєРѕР№ РјС‹ РІС‹С…РѕРґРёРј РёР· РІСЃРµРіРѕ С†РёРєР»Р° while
+		//РџСЂРё СЌС‚РѕРј, РІС‹С…РѕРґ РёР· С†РёРєР»Р° РїСЂРѕРёР·РѕР№РґРµС‚ РєРѕРіРґР° С…РѕС‚СЏ Р±С‹ РѕРґРЅРѕ РёР· РєРѕР»РµСЃ СЃРѕРІРµСЂС€РёС‚ РїРѕРІРѕСЂРѕС‚.
 
 		for (w = 0; w < WHEEL_COUNT; w++)
 		{
@@ -728,7 +728,7 @@ void Chassis::_wheel_rotate_sync()
 		digitalWrite(wheel_DIR_pins[w], !dir[w]);
 		digitalWrite(wheel_PWM_pins[w], dir[w]);
 	}
-	delay(25);//Задержка для жесктого останова - именно на это время на двигатели подается обратное напряжение
+	delay(25);//Р—Р°РґРµСЂР¶РєР° РґР»СЏ Р¶РµСЃРєС‚РѕРіРѕ РѕСЃС‚Р°РЅРѕРІР° - РёРјРµРЅРЅРѕ РЅР° СЌС‚Рѕ РІСЂРµРјСЏ РЅР° РґРІРёРіР°С‚РµР»Рё РїРѕРґР°РµС‚СЃСЏ РѕР±СЂР°С‚РЅРѕРµ РЅР°РїСЂСЏР¶РµРЅРёРµ
 	for (byte w = 0; w < WHEEL_COUNT; w++)
 	{
 		digitalWrite(wheel_DIR_pins[w], dir[w]);

@@ -4,15 +4,15 @@
 #define TO_HOST '>'
 #define FROM_HOST '<'
 
-#define MAX_PAYLOAD 17 //Размер полезной нагрузки, байт
+#define MAX_PAYLOAD 17 //Р Р°Р·РјРµСЂ РїРѕР»РµР·РЅРѕР№ РЅР°РіСЂСѓР·РєРё, Р±Р°Р№С‚
 #define PROTOCOL_MAX_PACKET (MAX_PAYLOAD + 5)
 
 struct tPacket {
-	char _header[2] = { '$', 'M' }; //преамбула
-	char _dir = FROM_HOST; //байт направления пакета: ">" - в хост от робота, "<" - в робота от хоста
-	unsigned char _size; //реальый размер payload
-	unsigned char _payload[MAX_PAYLOAD]; //массив payload (содержит в себе cmd и data, может быть от 1 (только код пакета) до 17 байт (1 байт кода пакета + 16 байт данных))
-	unsigned char _crc; //байт суммы по модулю 2 байтов полей _size и полезной части payload
+	char _header[2] = { '$', 'M' }; //РїСЂРµР°РјР±СѓР»Р°
+	char _dir = FROM_HOST; //Р±Р°Р№С‚ РЅР°РїСЂР°РІР»РµРЅРёСЏ РїР°РєРµС‚Р°: ">" - РІ С…РѕСЃС‚ РѕС‚ СЂРѕР±РѕС‚Р°, "<" - РІ СЂРѕР±РѕС‚Р° РѕС‚ С…РѕСЃС‚Р°
+	unsigned char _size; //СЂРµР°Р»СЊС‹Р№ СЂР°Р·РјРµСЂ payload
+	unsigned char _payload[MAX_PAYLOAD]; //РјР°СЃСЃРёРІ payload (СЃРѕРґРµСЂР¶РёС‚ РІ СЃРµР±Рµ cmd Рё data, РјРѕР¶РµС‚ Р±С‹С‚СЊ РѕС‚ 1 (С‚РѕР»СЊРєРѕ РєРѕРґ РїР°РєРµС‚Р°) РґРѕ 17 Р±Р°Р№С‚ (1 Р±Р°Р№С‚ РєРѕРґР° РїР°РєРµС‚Р° + 16 Р±Р°Р№С‚ РґР°РЅРЅС‹С…))
+	unsigned char _crc; //Р±Р°Р№С‚ СЃСѓРјРјС‹ РїРѕ РјРѕРґСѓР»СЋ 2 Р±Р°Р№С‚РѕРІ РїРѕР»РµР№ _size Рё РїРѕР»РµР·РЅРѕР№ С‡Р°СЃС‚Рё payload
 };
 
 int _protocol_crc_calc(struct tPacket *packet);

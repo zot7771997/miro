@@ -1,6 +1,6 @@
 #include "Device.h"
 
-#define MAX_DIST 4000 //4 метра
+#define MAX_DIST 4000 //4 РјРµС‚СЂР°
 
 class Usonic : virtual public Device {
 public:

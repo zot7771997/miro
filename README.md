@@ -1,2 +1,0 @@
-# miro
-MIRO Robot API
